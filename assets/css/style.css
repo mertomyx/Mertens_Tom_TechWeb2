@@ -62,3 +62,11 @@ button{
     color:white;
     padding:10px;
 }
+
+#lux{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+}
