@@ -32,3 +32,5 @@ Le site est hébergé sur GitHub.
 Conclusion
 Ce site permet de gérer un catalogue de montres, d’enregistrer les achats des clients, et de consulter les informations des ventes et des clients.
 
+pour le bon fonctionnement il faut le lancer en local: dans le terminal il faut mettre la commande " node server.js " afin d'obtenir http://localhost:3000/ une fois la dessus le site web est bien fonctionnel !
+

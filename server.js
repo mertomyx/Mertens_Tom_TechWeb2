@@ -1,3 +1,17 @@
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
+
+const app = express();
+const PORT = 3000;
+
+// Middleware pour parser les requêtes JSON
+app.use(express.json());
+
+// Servir les fichiers statiques (HTML, JSON, etc.)
+app.use(express.static(path.join(__dirname)));
+
+// Route pour sauvegarder un fichier JSON via POST
 app.post("/:file", (req, res) => {
     const filePath = path.join(__dirname, req.params.file);
 
@@ -32,4 +46,9 @@ app.post("/:file", (req, res) => {
             res.send("Données ajoutées avec succès !");
         });
     });
+});
+
+// Démarrer le serveur
+app.listen(PORT, () => {
+    console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });
