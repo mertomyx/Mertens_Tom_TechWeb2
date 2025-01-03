@@ -1,0 +1,72 @@
+[
+    {
+        "id": 1,
+        "modele": "Rolex Submariner",
+        "prix": 7500,
+        "description": "Montre de luxe avec un design intemporel.",
+        "disponible": true
+    },
+    {
+        "id": 2,
+        "modele": "Tag Heuer Carrera",
+        "prix": 3500,
+        "description": "Montre élégante et sportive.",
+        "disponible": true
+    },
+    {
+        "id": 3,
+        "modele": "Omega Seamaster",
+        "prix": 4200,
+        "description": "Montre pour les amateurs de plongée.",
+        "disponible": true
+    },
+    {
+        "id": 4,
+        "modele": "Cartier Santos",
+        "prix": 5000,
+        "description": "Montre classique et sophistiquée.",
+        "disponible": true
+    },
+    {
+        "id": 5,
+        "modele": "Breitling Navitimer",
+        "prix": 6200,
+        "description": "Montre de pilote avec des fonctionnalités avancées.",
+        "disponible": true
+    },
+    {
+        "id": 6,
+        "modele": "Panerai Luminor",
+        "prix": 7000,
+        "description": "Montre avec un design italien unique.",
+        "disponible": true
+    },
+    {
+        "id": 7,
+        "modele": "Hublot Big Bang",
+        "prix": 8500,
+        "description": "Montre innovante et audacieuse.",
+        "disponible": true
+    },
+    {
+        "id": 8,
+        "modele": "IWC Portugieser",
+        "prix": 7300,
+        "description": "Montre de luxe avec un cadran épuré.",
+        "disponible": true
+    },
+    {
+        "id": 9,
+        "modele": "Audemars Piguet Royal Oak",
+        "prix": 12000,
+        "description": "Montre iconique et prestigieuse.",
+        "disponible": true
+    },
+    {
+        "id": 10,
+        "modele": "Patek Philippe Nautilus",
+        "prix": 15000,
+        "description": "Montre haut de gamme avec un design moderne.",
+        "disponible": true
+    }
+]

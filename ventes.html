@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historique des Ventes</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Historique des Ventes</h1>
+        <a href="index.html">Retour à l'accueil</a>
+    </header>
+    <main id="Vente">
+        <!-- Les ventes seront insérées ici dynamiquement -->
+    </main>
+    <script type="module">
+        import { loadVentes } from './dist/models/Vente.js';
+        loadVentes();
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Clients</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Clients</h1>
+        <a href="index.html">Retour à l'accueil</a>
+    </header>
+    <main class="Clients">
+        <!-- Les clients seront insérés ici dynamiquement -->
+    </main>
+    <script type="module">
+        import { loadClients } from './dist/models/Clients.js';
+        loadClients();
+    </script>
+</body>
+</html>
