@@ -12,5 +12,12 @@
     "prix": 7300,
     "date": "2025-01-04",
     "clientId": 2
+  },
+  {
+    "id": 3,
+    "modele": "Omega Seamaster",
+    "prix": 4200,
+    "date": "2025-01-04",
+    "clientId": 3
   }
 ]
