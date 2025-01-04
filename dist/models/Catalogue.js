@@ -1,5 +1,6 @@
 (async () => {
     try {
+        // Charger les données depuis le fichier Catalogue.json
         const response = await fetch('/catalogue.json');
         if (!response.ok) throw new Error('Erreur lors du chargement du catalogue.');
         const montres = await response.json();
@@ -30,6 +31,7 @@
                 const montre = montres.find(m => m.id === montreId);
 
                 if (montre) {
+                    // Collecter les informations personnelles
                     const nom = prompt("Entrez votre nom :")?.trim();
                     const prenom = prompt("Entrez votre prénom :")?.trim();
                     const email = prompt("Entrez votre email :")?.trim();
@@ -51,7 +53,7 @@
                     const clients = await clientsResponse.json();
                     const ventes = await ventesResponse.json();
 
-                    // Ajouter un nouveau client si nécessaire
+                    // Vérifier si le client existe déjà
                     let client = clients.find(c => c.email === email);
                     if (!client) {
                         const newClientId = clients.length > 0 ? clients[clients.length - 1].id + 1 : 1;
@@ -61,10 +63,9 @@
                             prenom,
                             email,
                             adresse,
-                            commandes: []
+                            commandes: [] // Initialiser un tableau pour les commandes
                         };
                         clients.push(client);
-                        await saveData('/Clients.json', clients);
                     }
 
                     // Ajouter une nouvelle vente
@@ -78,14 +79,16 @@
                     };
                     ventes.push(newVente);
 
-                    // Sauvegarder la vente
-                    await saveData('/Vente.json', ventes);
+                    // Ajouter l'ID de commande au tableau `commandes` du client
+                    if (!client.commandes.includes(newVenteId)) {
+                        client.commandes.push(newVenteId);
+                    }
 
-                    // Ajouter l'ID de la commande au client
-                    client.commandes.push(newVenteId);
-                    await saveData('/Clients.json', clients);
+                    // Sauvegarder les clients et les ventes
+                    await saveData('/Clients.json', client);
+                    await saveData('/Vente.json', newVente);
 
-                    alert(`Merci pour votre achat, ${prenom} ${nom} !`);
+                    alert(`Merci pour votre achat, ${prenom} ${nom} ! Votre commande a été ajoutée avec succès.`);
                     window.location.reload(); // Rafraîchir pour mettre à jour l'affichage
                 }
             }

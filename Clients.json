@@ -6,7 +6,16 @@
     "email": "jean.dupont@example.com",
     "adresse": "12 rue des Lilas, Paris",
     "commandes": [
-      1,
+      1
+    ]
+  },
+  {
+    "id": 2,
+    "nom": "Mertens",
+    "prenom": "Tom",
+    "email": "tommertenstom@gmail.com",
+    "adresse": "52 chemin du tour, 7060",
+    "commandes": [
       2
     ]
   }
