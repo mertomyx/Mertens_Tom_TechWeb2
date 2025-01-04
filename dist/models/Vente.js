@@ -16,12 +16,12 @@ var Ventes = /** @class */ (function () {
 export async function loadVentes() {
     try {
         // Charger les données des ventes
-        const ventesResponse = await fetch('./Vente.json');
+        const ventesResponse = await fetch('/Vente.json');
         if (!ventesResponse.ok) throw new Error('Erreur lors du chargement des ventes.');
         const ventesData = await ventesResponse.json();
 
         // Charger les données des clients
-        const clientsResponse = await fetch('./Clients.json');
+        const clientsResponse = await fetch('/Clients.json');
         if (!clientsResponse.ok) throw new Error('Erreur lors du chargement des clients.');
         const clientsData = await clientsResponse.json();
 

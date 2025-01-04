@@ -26,12 +26,5 @@
     "prix": 5000,
     "date": "2024-03-05",
     "clientId": 3
-  },
-  {
-    "id": 5,
-    "modele": "Cartier Santos",
-    "prix": 5000,
-    "date": "2025-01-03",
-    "clientId": 4
   }
 ]

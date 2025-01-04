@@ -56,9 +56,8 @@
                     // Vérifier si le client existe déjà
                     let client = clients.find(c => c.email === email);
                     if (!client) {
-                        const newClientId = clients.length > 0 ? clients[clients.length - 1].id + 1 : 1;
                         client = {
-                            id: newClientId,
+                            id: clients.length + 1,
                             nom,
                             prenom,
                             email,
@@ -66,34 +65,29 @@
                             commandes: []
                         };
                         clients.push(client);
-
-                        // Sauvegarder uniquement le nouveau client
-                        await saveData('/Clients.json', clients);
+                        await saveData('/Clients.json', client);
                     }
 
                     // Vérifier si la vente existe déjà
-                    const venteExiste = ventes.some(v => v.modele === montre.modele && v.clientId === client.id);
-                    if (!venteExiste) {
-                        const newVenteId = ventes.length > 0 ? ventes[ventes.length - 1].id + 1 : 1;
+                    const venteExistante = ventes.some(v => v.modele === montre.modele && v.clientId === client.id);
+                    if (!venteExistante) {
                         const newVente = {
-                            id: newVenteId,
+                            id: ventes.length + 1,
                             modele: montre.modele,
                             prix: montre.prix,
                             date: new Date().toISOString().split('T')[0],
                             clientId: client.id
                         };
                         ventes.push(newVente);
+                        await saveData('/Vente.json', newVente);
 
-                        // Sauvegarder uniquement la nouvelle vente
-                        await saveData('/Vente.json', ventes);
-
-                        // Ajouter l'ID de la commande au client
-                        client.commandes.push(newVenteId);
+                        // Ajouter l'ID de commande au client
+                        client.commandes.push(newVente.id);
                         await saveData('/Clients.json', clients);
                     }
 
                     alert(`Merci pour votre achat, ${prenom} ${nom} !`);
-                    window.location.reload(); // Rafraîchir pour mettre à jour l'affichage
+                    window.location.reload();
                 }
             }
         });
@@ -101,7 +95,6 @@
         // Fonction pour sauvegarder les données dans un fichier JSON
         async function saveData(path, data) {
             try {
-                console.log(`Tentative de sauvegarde dans ${path} avec les données :`, data);
                 const response = await fetch(path, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -111,8 +104,6 @@
                 if (!response.ok) {
                     throw new Error(`Erreur lors de la sauvegarde sur ${path}: ${response.statusText}`);
                 }
-
-                console.log(`Données sauvegardées avec succès dans ${path}`);
             } catch (error) {
                 console.error("Erreur lors de la sauvegarde :", error.message);
             }

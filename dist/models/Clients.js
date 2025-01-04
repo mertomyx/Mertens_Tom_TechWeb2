@@ -16,7 +16,7 @@ var Clients = /** @class */ (function () {
 // Fonction pour charger et afficher les clients
 export async function loadClients() {
     try {
-        const response = await fetch('./Clients.json'); // Chemin mis à jour
+        const response = await fetch('/Clients.json'); // Chemin mis à jour
         if (!response.ok) throw new Error('Erreur lors du chargement des données.');
         const data = await response.json();
 

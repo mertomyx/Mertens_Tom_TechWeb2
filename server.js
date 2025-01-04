@@ -11,11 +11,11 @@ app.use(express.json());
 // Servir les fichiers statiques (HTML, JSON, etc.)
 app.use(express.static(path.join(__dirname)));
 
-// Route pour sauvegarder ou mettre à jour un fichier JSON via POST
+// Route pour sauvegarder des données JSON sans créer de doublons
 app.post("/:file", (req, res) => {
     const filePath = path.join(__dirname, req.params.file);
 
-    // Charger les données existantes du fichier
+    // Charger les données existantes
     fs.readFile(filePath, "utf8", (err, data) => {
         if (err) {
             console.error("Erreur lors de la lecture du fichier :", err);
@@ -26,7 +26,7 @@ app.post("/:file", (req, res) => {
         try {
             jsonData = JSON.parse(data);
             if (!Array.isArray(jsonData)) {
-                jsonData = []; // Si le fichier n'est pas un tableau, on initialise un tableau vide
+                jsonData = [];
             }
         } catch (parseError) {
             console.error("Erreur lors de l'analyse du fichier JSON :", parseError);
@@ -39,12 +39,14 @@ app.post("/:file", (req, res) => {
             return res.status(400).send("Les données envoyées sont invalides.");
         }
 
-        // Ajouter les nouvelles données
-        if (Array.isArray(newData)) {
-            jsonData.push(...newData);
-        } else {
-            jsonData.push(newData);
+        // Éviter les doublons
+        const isDuplicate = jsonData.some(item => JSON.stringify(item) === JSON.stringify(newData));
+        if (isDuplicate) {
+            return res.status(200).send("Les données existent déjà, aucune modification nécessaire.");
         }
+
+        // Ajouter les nouvelles données
+        jsonData.push(newData);
 
         // Sauvegarder les données mises à jour
         fs.writeFile(filePath, JSON.stringify(jsonData, null, 2), "utf8", (writeErr) => {
@@ -55,4 +57,9 @@ app.post("/:file", (req, res) => {
             res.send("Données ajoutées avec succès !");
         });
     });
+});
+
+// Démarrer le serveur
+app.listen(PORT, () => {
+    console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });

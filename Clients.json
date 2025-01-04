@@ -22,13 +22,5 @@
     "email": "john.doe@example.com",
     "adresse": "50 boulevard Haussmann, Marseille",
     "commandes": [4]
-  },
-  {
-    "id": 4,
-    "nom": "Mertens",
-    "prenom": "Tom",
-    "email": "tommertenstom@gmail.com",
-    "adresse": "52 chemin du tour, Soignies",
-    "commandes": [5]
   }
 ]
