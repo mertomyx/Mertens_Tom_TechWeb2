@@ -6,7 +6,9 @@ body {
     color: #333;
 }
 header {
-    background: #0078d7;
+    background-image: url("img/img.webp");
+    background-size: cover;
+    background-position-y: 30%;
     padding: 1rem;
     color: white;
     text-align: center;
