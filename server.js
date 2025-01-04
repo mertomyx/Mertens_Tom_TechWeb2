@@ -11,7 +11,7 @@ app.use(express.json());
 // Servir les fichiers statiques (HTML, JSON, etc.)
 app.use(express.static(path.join(__dirname)));
 
-// Route pour sauvegarder un fichier JSON via POST
+// Route pour sauvegarder ou mettre à jour un fichier JSON via POST
 app.post("/:file", (req, res) => {
     const filePath = path.join(__dirname, req.params.file);
 
@@ -22,19 +22,28 @@ app.post("/:file", (req, res) => {
             return res.status(500).send("Erreur lors de la lecture du fichier.");
         }
 
-        let jsonData = [];
+        let jsonData;
         try {
             jsonData = JSON.parse(data);
+            if (!Array.isArray(jsonData)) {
+                jsonData = []; // Si le fichier n'est pas un tableau, on initialise un tableau vide
+            }
         } catch (parseError) {
             console.error("Erreur lors de l'analyse du fichier JSON :", parseError);
+            jsonData = [];
+        }
+
+        // Validation des données envoyées
+        const newData = req.body;
+        if (!newData || Object.keys(newData).length === 0) {
+            return res.status(400).send("Les données envoyées sont invalides.");
         }
 
         // Ajouter les nouvelles données
-        const newData = req.body;
-        if (Array.isArray(jsonData)) {
-            jsonData.push(newData);
+        if (Array.isArray(newData)) {
+            jsonData.push(...newData);
         } else {
-            jsonData = [newData];
+            jsonData.push(newData);
         }
 
         // Sauvegarder les données mises à jour
@@ -46,9 +55,4 @@ app.post("/:file", (req, res) => {
             res.send("Données ajoutées avec succès !");
         });
     });
-});
-
-// Démarrer le serveur
-app.listen(PORT, () => {
-    console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });

@@ -32,53 +32,65 @@
 
                 if (montre) {
                     // Collecter les informations personnelles
-                    const nom = prompt("Entrez votre nom :");
-                    const prenom = prompt("Entrez votre prénom :");
-                    const email = prompt("Entrez votre email :");
-                    const adresse = prompt("Entrez votre adresse postale :");
+                    const nom = prompt("Entrez votre nom :")?.trim();
+                    const prenom = prompt("Entrez votre prénom :")?.trim();
+                    const email = prompt("Entrez votre email :")?.trim();
+                    const adresse = prompt("Entrez votre adresse postale :")?.trim();
 
-                    if (nom && prenom && email && adresse) {
-                        // Charger les données clients et ventes
-                        const clientsResponse = await fetch('/Clients.json');
-                        const ventesResponse = await fetch('/Vente.json');
-
-                        const clients = await clientsResponse.json();
-                        const ventes = await ventesResponse.json();
-
-                        // Ajouter un nouveau client si nécessaire
-                        let client = clients.find(c => c.email === email);
-                        if (!client) {
-                            const newClientId = clients.length + 1;
-                            client = {
-                                id: newClientId,
-                                nom,
-                                prenom,
-                                email,
-                                adresse,
-                                commandes: []
-                            };
-                            clients.push(client);
-
-                            // Sauvegarder le nouveau client
-                            await saveData('/Clients.json', clients);
-                        }
-
-                        // Ajouter la vente
-                        const newVente = {
-                            id: ventes.length + 1,
-                            modele: montre.modele,
-                            prix: montre.prix,
-                            date: new Date().toISOString().split('T')[0], // Date actuelle
-                            clientId: client.id
-                        };
-                        ventes.push(newVente);
-
-                        // Sauvegarder la nouvelle vente
-                        await saveData('/Vente.json', ventes);
-
-                        alert(`Merci pour votre achat, ${prenom} ${nom} !`);
-                        window.location.reload(); // Rafraîchir pour mettre à jour l'affichage
+                    if (!nom || !prenom || !email || !adresse) {
+                        alert("Tous les champs doivent être remplis pour continuer.");
+                        return;
                     }
+
+                    // Charger les données clients et ventes
+                    const clientsResponse = await fetch('/Clients.json');
+                    const ventesResponse = await fetch('/Vente.json');
+
+                    if (!clientsResponse.ok || !ventesResponse.ok) {
+                        throw new Error('Erreur lors du chargement des fichiers Clients ou Ventes.');
+                    }
+
+                    const clients = await clientsResponse.json();
+                    const ventes = await ventesResponse.json();
+
+                    // Ajouter un nouveau client si nécessaire
+                    let client = clients.find(c => c.email === email);
+                    if (!client) {
+                        const newClientId = clients.length > 0 ? clients[clients.length - 1].id + 1 : 1;
+                        client = {
+                            id: newClientId,
+                            nom,
+                            prenom,
+                            email,
+                            adresse,
+                            commandes: []
+                        };
+                        clients.push(client);
+
+                        // Sauvegarder le nouveau client
+                        await saveData('/Clients.json', clients);
+                    }
+
+                    // Ajouter la vente
+                    const newVenteId = ventes.length > 0 ? ventes[ventes.length - 1].id + 1 : 1;
+                    const newVente = {
+                        id: newVenteId,
+                        modele: montre.modele,
+                        prix: montre.prix,
+                        date: new Date().toISOString().split('T')[0], // Date actuelle
+                        clientId: client.id
+                    };
+                    ventes.push(newVente);
+
+                    // Sauvegarder la nouvelle vente
+                    await saveData('/Vente.json', ventes);
+
+                    // Ajouter l'id de la commande au client
+                    client.commandes.push(newVenteId);
+                    await saveData('/Clients.json', clients);
+
+                    alert(`Merci pour votre achat, ${prenom} ${nom} !`);
+                    window.location.reload(); // Rafraîchir pour mettre à jour l'affichage
                 }
             }
         });
@@ -86,6 +98,7 @@
         // Fonction pour sauvegarder les données dans un fichier JSON
         async function saveData(path, data) {
             try {
+                console.log(`Tentative de sauvegarde dans ${path} avec les données :`, data);
                 const response = await fetch(path, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
