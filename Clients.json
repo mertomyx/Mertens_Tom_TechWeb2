@@ -6,21 +6,5 @@
     "email": "jean.dupont@example.com",
     "adresse": "12 rue des Lilas, Paris",
     "commandes": [1, 2]
-  },
-  {
-    "id": 2,
-    "nom": "Martin",
-    "prenom": "Claire",
-    "email": "claire.martin@example.com",
-    "adresse": "25 avenue des Champs, Lyon",
-    "commandes": [3]
-  },
-  {
-    "id": 3,
-    "nom": "Doe",
-    "prenom": "John",
-    "email": "john.doe@example.com",
-    "adresse": "50 boulevard Haussmann, Marseille",
-    "commandes": [4]
   }
 ]

@@ -1,6 +1,5 @@
 (async () => {
     try {
-        // Charger les données depuis le fichier Catalogue.json
         const response = await fetch('/catalogue.json');
         if (!response.ok) throw new Error('Erreur lors du chargement du catalogue.');
         const montres = await response.json();
@@ -31,7 +30,6 @@
                 const montre = montres.find(m => m.id === montreId);
 
                 if (montre) {
-                    // Collecter les informations personnelles
                     const nom = prompt("Entrez votre nom :")?.trim();
                     const prenom = prompt("Entrez votre prénom :")?.trim();
                     const email = prompt("Entrez votre email :")?.trim();
@@ -42,52 +40,32 @@
                         return;
                     }
 
-                    // Charger les données clients et ventes
+                    // Charger les données clients
                     const clientsResponse = await fetch('/Clients.json');
-                    const ventesResponse = await fetch('/Vente.json');
-
-                    if (!clientsResponse.ok || !ventesResponse.ok) {
-                        throw new Error('Erreur lors du chargement des fichiers Clients ou Ventes.');
+                    if (!clientsResponse.ok) {
+                        throw new Error('Erreur lors du chargement de Clients.json.');
                     }
 
                     const clients = await clientsResponse.json();
-                    const ventes = await ventesResponse.json();
 
-                    // Vérifier si le client existe déjà
+                    // Ajouter un nouveau client si nécessaire
                     let client = clients.find(c => c.email === email);
                     if (!client) {
+                        const newClientId = clients.length > 0 ? clients[clients.length - 1].id + 1 : 1;
                         client = {
-                            id: clients.length + 1,
+                            id: newClientId,
                             nom,
                             prenom,
                             email,
                             adresse,
                             commandes: []
                         };
-                        clients.push(client);
+
+                        // Sauvegarder uniquement le nouveau client
                         await saveData('/Clients.json', client);
                     }
 
-                    // Vérifier si la vente existe déjà
-                    const venteExistante = ventes.some(v => v.modele === montre.modele && v.clientId === client.id);
-                    if (!venteExistante) {
-                        const newVente = {
-                            id: ventes.length + 1,
-                            modele: montre.modele,
-                            prix: montre.prix,
-                            date: new Date().toISOString().split('T')[0],
-                            clientId: client.id
-                        };
-                        ventes.push(newVente);
-                        await saveData('/Vente.json', newVente);
-
-                        // Ajouter l'ID de commande au client
-                        client.commandes.push(newVente.id);
-                        await saveData('/Clients.json', clients);
-                    }
-
                     alert(`Merci pour votre achat, ${prenom} ${nom} !`);
-                    window.location.reload();
                 }
             }
         });
@@ -98,7 +76,7 @@
                 const response = await fetch(path, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
+                    body: JSON.stringify(data), // Envoie uniquement un objet, pas un tableau
                 });
 
                 if (!response.ok) {

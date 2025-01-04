@@ -8,10 +8,10 @@ const PORT = 3000;
 // Middleware pour parser les requêtes JSON
 app.use(express.json());
 
-// Servir les fichiers statiques (HTML, JSON, etc.)
+// Servir les fichiers statiques
 app.use(express.static(path.join(__dirname)));
 
-// Route pour sauvegarder des données JSON sans créer de doublons
+// Route pour sauvegarder des données dans un fichier JSON
 app.post("/:file", (req, res) => {
     const filePath = path.join(__dirname, req.params.file);
 
@@ -26,26 +26,21 @@ app.post("/:file", (req, res) => {
         try {
             jsonData = JSON.parse(data);
             if (!Array.isArray(jsonData)) {
-                jsonData = [];
+                jsonData = []; // Si le fichier JSON n'est pas un tableau valide, initialiser un tableau vide
             }
         } catch (parseError) {
             console.error("Erreur lors de l'analyse du fichier JSON :", parseError);
             jsonData = [];
         }
 
-        // Validation des données envoyées
         const newData = req.body;
-        if (!newData || Object.keys(newData).length === 0) {
-            return res.status(400).send("Les données envoyées sont invalides.");
+
+        // Vérifier que les données envoyées sont valides
+        if (!newData || typeof newData !== "object" || Array.isArray(newData)) {
+            return res.status(400).send("Les données envoyées doivent être un objet JSON valide.");
         }
 
-        // Éviter les doublons
-        const isDuplicate = jsonData.some(item => JSON.stringify(item) === JSON.stringify(newData));
-        if (isDuplicate) {
-            return res.status(200).send("Les données existent déjà, aucune modification nécessaire.");
-        }
-
-        // Ajouter les nouvelles données
+        // Ajouter uniquement le nouvel objet au tableau
         jsonData.push(newData);
 
         // Sauvegarder les données mises à jour
