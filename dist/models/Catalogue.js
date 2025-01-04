@@ -40,13 +40,16 @@
                         return;
                     }
 
-                    // Charger les données clients
+                    // Charger les données clients et ventes
                     const clientsResponse = await fetch('/Clients.json');
-                    if (!clientsResponse.ok) {
-                        throw new Error('Erreur lors du chargement de Clients.json.');
+                    const ventesResponse = await fetch('/Vente.json');
+
+                    if (!clientsResponse.ok || !ventesResponse.ok) {
+                        throw new Error('Erreur lors du chargement des fichiers Clients ou Ventes.');
                     }
 
                     const clients = await clientsResponse.json();
+                    const ventes = await ventesResponse.json();
 
                     // Ajouter un nouveau client si nécessaire
                     let client = clients.find(c => c.email === email);
@@ -60,12 +63,30 @@
                             adresse,
                             commandes: []
                         };
-
-                        // Sauvegarder uniquement le nouveau client
-                        await saveData('/Clients.json', client);
+                        clients.push(client);
+                        await saveData('/Clients.json', clients);
                     }
 
+                    // Ajouter une nouvelle vente
+                    const newVenteId = ventes.length > 0 ? ventes[ventes.length - 1].id + 1 : 1;
+                    const newVente = {
+                        id: newVenteId,
+                        modele: montre.modele,
+                        prix: montre.prix,
+                        date: new Date().toISOString().split('T')[0],
+                        clientId: client.id
+                    };
+                    ventes.push(newVente);
+
+                    // Sauvegarder la vente
+                    await saveData('/Vente.json', ventes);
+
+                    // Ajouter l'ID de la commande au client
+                    client.commandes.push(newVenteId);
+                    await saveData('/Clients.json', clients);
+
                     alert(`Merci pour votre achat, ${prenom} ${nom} !`);
+                    window.location.reload(); // Rafraîchir pour mettre à jour l'affichage
                 }
             }
         });
@@ -76,7 +97,7 @@
                 const response = await fetch(path, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data), // Envoie uniquement un objet, pas un tableau
+                    body: JSON.stringify(data),
                 });
 
                 if (!response.ok) {

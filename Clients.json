@@ -5,6 +5,9 @@
     "prenom": "Jean",
     "email": "jean.dupont@example.com",
     "adresse": "12 rue des Lilas, Paris",
-    "commandes": [1, 2]
+    "commandes": [
+      1,
+      2
+    ]
   }
 ]
