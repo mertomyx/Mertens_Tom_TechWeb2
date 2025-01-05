@@ -1,6 +1,6 @@
 Guide d’utilisation de mon site web
 1. Accéder au site web
-Pour accéder au site web, utilisez le lien suivant : https://github.com/mertomyx/v2
+Pour accéder au site web, utilisez le lien suivant : https://github.com/mertomyx/Mertens_Tom_TechWeb2/tree/dev
 
 2. Navigation dans le site
 Accueil : Contient une brève présentation du site et des liens vers les différentes sections.
