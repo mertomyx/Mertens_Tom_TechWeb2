@@ -19,5 +19,12 @@
     "prix": 4200,
     "date": "2025-01-04",
     "clientId": 3
+  },
+  {
+    "id": 4,
+    "modele": "Audemars Piguet Royal Oak",
+    "prix": 12000,
+    "date": "2025-01-05",
+    "clientId": 4
   }
 ]
